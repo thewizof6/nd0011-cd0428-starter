@@ -1,9 +1,8 @@
-const myRequest = new Request("starter/data/aboutMeData.json");
-const data = '';
+const bodyClass = document.querySelector('body');
+bodyClass.classList.add('body');
+const headerElement = document.querySelector('header');
+headerElement.classList.add('header');
+headerElement.firstElementChild.textContent = 'Mississippi Flash';
 
-fetch(myRequest)
-    .then((response) => response.json);
 
-    console.log(JSON.parse(data));
 
-        
