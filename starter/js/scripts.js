@@ -21,7 +21,7 @@ mainElement.classList.add('main');
 
 //Populate ABOUTME Container
 const elementAboutMe = document.querySelector('div#aboutMe');
-const pathAboutMe = "starter/data/aboutMeData.json";
+const pathAboutMe = "data/aboutMeData.json";
 //fetch aboutMeData.json
 const getAboutMe = async() => {
     try {
@@ -51,5 +51,48 @@ const getAboutMe = async() => {
 }
 getAboutMe();
 
+//PROJECTS section
 
+//Seet up to create and insert document fragment
+const projectList = document.querySelector('sidebar#projectList');
+const pathProjectData = "data/projectsData.json";
+const projectFragment = document.createDocumentFragment();
+
+//get JSON data and build elements for each project Card
+const getProjectData = async() => {
+    try {
+        const response = await fetch(pathProjectData);
+
+        //Check for errors in data fetch
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        //Parse JSON into objects
+        const result = await response.json();        
+        const projects = {...result};
+
+        //loop through objects created from JSON to create new element and insert content 
+        for (const project in projects) {
+            let id = `${projects[project].project_id}`;
+            let shortDesc = `${projects[project].short_description}`;
+            let projectId = document.createElement('div');
+            projectId.classList.add('projectCard');
+            projectId.id = id;
+            projectId.style.backgroundImage = `url(${projects[project].card_image})` //?? url('../images/card_placeholder_bg.webp');
+            let name = document.createElement('h4');
+            name.textContent = id;
+            projectId.append(name);
+            let desc = document.createElement('p');
+            desc.textContent = shortDesc;
+            projectId.append(desc);
+            projectFragment.append(projectId);
+        }
+        //Report errors
+    }   catch(error) {
+        console.error(error.message);    
+    }
+    //Splice docmunet fragment in to Projects section 
+    projectList.append(projectFragment);
+}
+getProjectData();
 
