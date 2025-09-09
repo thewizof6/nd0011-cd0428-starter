@@ -73,14 +73,15 @@ const getProjectData = async() => {
 
         //loop through objects created from JSON to create new element and insert content 
         for (const project in projects) {
-            let id = `${projects[project].project_id}`;
-            let shortDesc = `${projects[project].short_description}`;
+            let id = `${projects[project].project_id ?? 'Id - TBD'}`;
+            let shortDesc = `${projects[project].short_description ?? 'Description - TBD'}`;
             let projectId = document.createElement('div');
             projectId.classList.add('projectCard');
             projectId.id = id;
-            projectId.style.backgroundImage = `url(${projects[project].card_image})` //?? url('../images/card_placeholder_bg.webp');
+            projectId.style.backgroundImage = `url(${projects[project].card_image ?? '../images/card_placeholder_bg.webp'})`;
             let name = document.createElement('h4');
-            name.textContent = id;
+            let projectName = `${projects[project].project_name ?? 'Name - TBD'}`;
+            name.textContent = projectName;
             projectId.append(name);
             let desc = document.createElement('p');
             desc.textContent = shortDesc;
