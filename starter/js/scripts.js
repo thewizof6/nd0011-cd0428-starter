@@ -97,3 +97,18 @@ const getProjectData = async() => {
 }
 getProjectData();
 
+//scroll Sidebar
+//console.log(projectList);
+
+const tl = new ScrollTimeline({
+  source: projectList,
+});
+
+function moveRight() {
+    projectList.scroll({left: -100});
+}
+
+const arrowRight = document.querySelector('span.arrow-right');
+arrowRight.append('after');
+arrowRight.addEventListener('pointerdown', moveRight());
+
