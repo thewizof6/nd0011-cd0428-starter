@@ -53,7 +53,7 @@ getAboutMe();
 
 //PROJECTS section
 
-//Seet up to create and insert document fragment
+//Setup to create and insert document fragment
 const projectList = document.querySelector('sidebar#projectList');
 const pathProjectData = "data/projectsData.json";
 const projectFragment = document.createDocumentFragment();
@@ -119,21 +119,14 @@ arrowRight.addEventListener('pointerdown', moveRight());
 
 
 
-//Get Spotlight data
+//Populate SpotlightTiltes
 const projectSpotlight = document.querySelector('div#projectSpotlight');
 const spotlightTitles = document.querySelector('div#spotlightTitles');
-//console.log(spotlightTitles);
 const spotlightFragment = document.createDocumentFragment();
 
-///*********Update funcito to handle project IDs***********
-//get JSON data and build elements for each project Card
-const getSpotlightData = async(i) => {
+//get JSON data and build elements for selected project Spotlight
+const getSpotlightData = async(i = 'project_personal') => {
     try {
-        // tempory assignement until get for loop working
-        if (i === defaultProj) {
-            i = 0;
-        }
-
         const response = await fetch(pathProjectData);
 
         //Check for errors in data fetch
@@ -143,31 +136,27 @@ const getSpotlightData = async(i) => {
         //Parse JSON into objects
         const result = await response.json();        
         const projects = {...result};
-        const max = Object.values(projects).length;
-        let test = `${projects[3].project_id}`;
-        console.log(projects[3].project_id);
-        let k = 0;
-        for (let j = 0; j <= max ; j++) {
-            if (test === `${projects[j].project_id}`) {
-                console.log(`${projects[j].project_id}`, j);
-                k= j;
-                break   
+
+        // Determine which project to extract from JSON
+        for (const [key, value] of Object.entries(projects)) {
+            if (i === `${projects[key].project_id}`) {
+                k = key;
             }
         }
-        const defaultName = `${projects[k].project_name}`;
-        const defaultLongDesc = `${projects[k].long_description}`;
-        const defaultUrl = `${projects[k].url}`;
-        const defaultBg = `${projects[k].spotlight_image}`;
-        let projectName = defaultName;
-        let longDesc = defaultLongDesc;
-        let url = defaultUrl;
-        projectSpotlight.style.backgroundImage = `url(${projects[k].spotlight_image})`;
+/*         //Populate element data 
+        //const Name = `${projects[k].project_name}`;
+        //const LongDesc = `${projects[k].long_description}`;
+        //const url = `${projects[k].url}`;
+        let projectName = Name;
+        let longDesc = LongDesc;
+        let bgUrl = url;
+ */        projectSpotlight.style.backgroundImage = `url(${projects[k].spotlight_image ?? '../images/spotlight_placeholder_bg.webp'})`;
         let spotlightName = document.createElement('h3');
-        spotlightName.textContent = projectName;
+        spotlightName.textContent = `${projects[k].project_name ?? 'Name - TBD'}`;
         let spotlightDesc = document.createElement('p');
-        spotlightDesc.textContent = longDesc;
+        spotlightDesc.textContent = `${projects[k].long_description ?? 'Description - TBD'}`;
         let spotlightUrl = document.createElement('a');
-        spotlightUrl.textContent = url;
+        spotlightUrl.textContent = `${projects[k].url ?? 'Link - TBD'}`;
 
         spotlightFragment.append(spotlightName);
         spotlightFragment.append(spotlightDesc)
@@ -178,30 +167,28 @@ const getSpotlightData = async(i) => {
         console.error(error.message);    
     }
 
-    //************figure put how to replace the fragment/element**********
-    //Splice document fragment into Projects section 
+    //Clear and append fragment to Spotlight Titles   
+    spotlightTitles.replaceChildren();
     spotlightTitles.append(spotlightFragment);
 }
-const defaultProj = '';
-getSpotlightData(defaultProj);
+//Execute populate Potlight title
+getSpotlightData();
 
 
-//Event listener for spolight project
+//Event listener for spotlight project
 const projectListener = async() => {
     const projectContainer = document.querySelector('sidebar#projectList')
     projectContainer.addEventListener('pointerdown', handleClick)
 }
 
+//Determines project clicked and executes getSpotlightData using that ID
 const handleClick = async(event) => {
     const projectCard = event.target.closest('.projectCard');
     const selectedCard = projectCard.id;
-    console.log(selectedCard);
-    ///******** used 'selectedCard' for frageent replacment******
-    getSpotlightData(3);
+    getSpotlightData(selectedCard);
 }
-//const spotlight = 
+
+//Execute event handler
 projectListener();
-//console.log(spotlight);
 
 
-//getSpotlightData()
