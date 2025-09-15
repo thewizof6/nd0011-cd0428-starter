@@ -143,21 +143,17 @@ const getSpotlightData = async(i = 'project_personal') => {
                 k = key;
             }
         }
-/*         //Populate element data 
-        //const Name = `${projects[k].project_name}`;
-        //const LongDesc = `${projects[k].long_description}`;
-        //const url = `${projects[k].url}`;
-        let projectName = Name;
-        let longDesc = LongDesc;
-        let bgUrl = url;
- */        projectSpotlight.style.backgroundImage = `url(${projects[k].spotlight_image ?? '../images/spotlight_placeholder_bg.webp'})`;
+        //Populate element data 
+        projectSpotlight.style.backgroundImage = `url(${projects[k].spotlight_image ?? '../images/spotlight_placeholder_bg.webp'})`;
         let spotlightName = document.createElement('h3');
         spotlightName.textContent = `${projects[k].project_name ?? 'Name - TBD'}`;
         let spotlightDesc = document.createElement('p');
         spotlightDesc.textContent = `${projects[k].long_description ?? 'Description - TBD'}`;
         let spotlightUrl = document.createElement('a');
-        spotlightUrl.textContent = `${projects[k].url ?? 'Link - TBD'}`;
-
+        let url = `${projects[k].url}`;
+        spotlightUrl.setAttribute('href', `${projects[k].url ?? '#contactContainer'}`);
+        spotlightUrl.textContent = 'Click here to see more...';
+        
         spotlightFragment.append(spotlightName);
         spotlightFragment.append(spotlightDesc)
         spotlightFragment.append(spotlightUrl);
