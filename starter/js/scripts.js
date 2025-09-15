@@ -192,3 +192,121 @@ const handleClick = async(event) => {
 projectListener();
 
 
+//CONTACT CONTAiNER
+
+
+// show a message with a type of the input
+function showMessage(input, message, type) {
+    //console.log(input, message, type);
+	// get the small element and set the message
+    let msg = ''
+    if (input.id === 'contactEmail') {
+        msg = document.querySelector('div#emailError');
+    } else if (input.id === 'contactMessage') {
+        msg = document.querySelector('div#messageError');
+    } else {
+        msg = '';
+    }   
+	msg.innerText = message;
+	// update the class for the input
+	input.className = type ? "success" : "error";
+	return type;
+}
+
+function showError(input, message) {
+	return showMessage(input, message, false);
+}
+
+function showSuccess(input) {
+	return showMessage(input, "", true);
+}
+
+function hasValue(input, message) {
+	if (input.value.trim() === "") {
+		return showError(input, message);
+	}
+	return showSuccess(input);
+}
+
+function validateEmail(input, requiredMsg, invalidMsg) {
+	// check if the value is not empty
+	if (!hasValue(input, requiredMsg)) {
+		return false;
+	}
+	// validate email format
+	const emailRegex =
+		/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	const email = input.value.trim();
+	if (!emailRegex.test(email)) {
+		return showError(input, invalidMsg);
+	}
+	return true;
+}
+
+function validateMessage(input, requiredMsg, invalidMsg, exceedLengthMsg, msgLengthOk) {
+    //console.log(input, requiredMsg, invalidMsg, exceedLengthMsg, msgLengthOk);
+	// check if the value is not empty
+	if (!hasValue(input, requiredMsg)) {
+		return false;
+	}
+	// validate message format
+	const messageRegex =
+		/[a-zA-Z0-9@._-]/;
+
+	const message = input.value.trim();
+    console.log(message);
+	if (!messageRegex.test(message)) {
+		return showError(input, invalidMsg);
+    }
+    
+    if (!msgLengthOk) {
+        return showError(input, exceedLengthMsg);
+    }
+	return true;
+}
+
+
+
+const messageText = document.querySelector('textarea');
+const counter = document.querySelector('div#charactersLeft');
+const maxLength = 300;
+let withinMsgLength = true;
+
+//console.log(messageText, counter, maxLength );
+
+messageText.addEventListener('input', () => {
+    let length = messageText.value.length;
+    counter.textContent = `Characters: ${length} / ${maxLength}`;
+    if (length > maxLength) {
+        withinMsgLength = false;
+    } else {
+        withinMsgLength = true;
+    }
+    return withinMsgLength;
+})
+
+
+const EMAIL_REQUIRED = "Please enter your email";
+const EMAIL_INVALID = "Please enter a correct email address format";
+const MESSAGE_REQUIRED = "Please type your message";
+const MESSAGE_INVALID = "Please limit text to: upper and lowercase letters, numbers and '@', '.', '_', '-' . ";
+const MESSAGE_EXCEEDED_LENGTH = "Message is too long - maximum length 300 characters";
+
+const form = document.querySelector("#formSection");
+form.addEventListener("submit", function (event) {
+	// stop form submission
+	event.preventDefault();
+
+	// validate the form
+	let emailValid = validateEmail(form.elements["contactEmail"], EMAIL_REQUIRED, EMAIL_INVALID);
+    //console.log(emailValid);
+	let messageValid = validateMessage(form.elements["contactMessage"], MESSAGE_REQUIRED, MESSAGE_INVALID, MESSAGE_EXCEEDED_LENGTH, withinMsgLength);
+    //console.log(messageValid);
+	// if valid, submit the form.
+	if (emailValid && messageValid) {
+		alert("Demo only. No form was posted.");
+	}
+});
+
+ 
