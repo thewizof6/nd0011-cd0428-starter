@@ -105,17 +105,45 @@ getProjectData();
 //scroll Sidebar
 //console.log(projectList);
 
-const tl = new ScrollTimeline({
-  source: projectList,
-});
-
-function moveRight() {
-    projectList.scroll({left: -100});
+function handleRightArrow(event) {
+    
+    
 }
 
-const arrowRight = document.querySelector('span.arrow-right');
-arrowRight.append('after');
-arrowRight.addEventListener('pointerdown', moveRight());
+//const arrowRight = document.querySelector('span.arrow-right');
+//arrowRight.addEventListener('click', handleRightArrow);
+
+handleRightArrow = async(event) => {
+    const scrollNavArrow = event.target.parentElement;
+    const scrollProjectList = scrollNavArrow.previousElementSibling;
+    console.log(scrollProjectList);
+    scrollProjectList.scrollBy({top: 200, left: 200, behavior: 'auto' });
+}
+handleLeftArrow = async(event) => {
+    const scrollNavArrow = event.target.parentElement;
+    const scrollProjectList = scrollNavArrow.previousElementSibling;
+    console.log(scrollProjectList);
+    scrollProjectList.scrollBy({top: -200, left: -200, behavior: 'auto' });
+}
+
+
+const rightScrollListener = async() => {
+    //const cardContainer = document.querySelector('.product-grid')
+    const arrowRight = document.querySelector('span.arrow-right');
+    arrowRight.addEventListener('pointerdown', handleRightArrow, {once: false});
+}
+
+const leftScrollListener = async() => {
+    //const cardContainer = document.querySelector('.product-grid')
+    const arrowLeft = document.querySelector('span.arrow-left');
+    arrowLeft.addEventListener('pointerdown', handleLeftArrow, {once: false});
+}
+
+rightScrollListener();
+leftScrollListener();
+
+
+
 
 
 
