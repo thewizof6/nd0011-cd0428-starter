@@ -238,6 +238,7 @@ const MESSAGE_EXCEEDED_LENGTH = "Message is too long - maximum length 300 charac
 let withinMsgLength = true;
 
 
+
 //Takes inpt from showError() and showSucess()
 //Determines UI location, inserts messages into UI page
 function showMessage(input, message, type) {
@@ -301,7 +302,6 @@ function validateMessage(input, requiredMsg, invalidMsg, exceedLengthMsg, msgLen
 	const messageRegex = /[^a-zA-Z0-9@._-\s]/;
 
 	const message = input.value.trim();
-    console.log(messageRegex.test(message))
 	if (messageRegex.test(message)) {
 		return showError(input, invalidMsg);
     }
@@ -311,16 +311,25 @@ function validateMessage(input, requiredMsg, invalidMsg, exceedLengthMsg, msgLen
     }
 	return true;
 }
-
+ 
 //Event listener that monitors and updates message size real-time
 //Message length valid T/F used by validateMessage()
 messageText.addEventListener('input', () => {
-    let length = messageText.value.length;
-    counter.textContent = `Characters: ${length} / ${maxLength}`;
-    if (length > maxLength) {
-        withinMsgLength = false;
-    } else {
-        withinMsgLength = true;
+    try {
+        let length = messageText.value.length;
+        const lettersLeft = document.getElementById('charactersLeft');
+        counter.textContent = `Characters: ${length} / ${maxLength}`;
+        if (length > maxLength) {
+            withinMsgLength = false
+            lettersLeft.style.color = 'red';
+            throw new Error("Message Exceeded Character Limit");
+
+        } else {
+            lettersLeft.style.color = 'black';
+            withinMsgLength = true;
+        }
+    } catch (error) {
+        console.log(error.message);
     }
     return withinMsgLength;
 })
